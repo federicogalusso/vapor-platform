@@ -1,0 +1,17 @@
+# Imagen base
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copiar los archivos de proyecto y restaurar dependencias
+COPY . .
+RUN dotnet restore ./Statistics/Statistics.csproj
+
+# Publicar la aplicación en una carpeta específica
+RUN dotnet publish ./Statistics/Statistics.csproj -c Release -o /app/publish
+
+# Imagen de runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+COPY --from=build /app/publish .
+EXPOSE 5062
+ENTRYPOINT ["dotnet", "Statistics.dll"]

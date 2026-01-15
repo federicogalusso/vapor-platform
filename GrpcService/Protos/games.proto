@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcService";
+
+package games;
+
+// The greeting service definition.
+service Games {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply);
+
+  rpc Get (GamesRequest) returns (GamesReply);
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings.
+message HelloReply {
+  string message = 1;
+}
+
+message GamesRequest { }
+  
+message GamesReply {
+
+repeated string beers = 1;
+
+}
+
+service GrpcGameService {
+  rpc PublishGame (PublishGameRequest) returns (GameResponse);
+  rpc GetGameByTitle (GameRequest) returns (GameResponse);
+  rpc ModifyGame (ModifyGameRequest) returns (GameResponse);
+  rpc DeleteGame (GameRequest) returns (GameResponse);
+  rpc GetAllGames (Empty) returns (GameListResponse);
+  rpc PurchaseGame (GameRequest) returns (GameResponse);
+}
+
+// Game messages
+message PublishGameRequest {
+  string title = 1;
+  string type = 2;
+  string launch_date = 3;
+  string platform = 4;
+  string publisher = 5;
+  int32 available_units = 6;
+  string image = 7;
+  string owner = 8;
+}
+
+message PurchaseGameRequest{
+  string title = 1;
+}
+
+message GetAllGamesRequest {}
+
+message ModifyGameRequest {
+  string original_title = 1;
+  string title = 2;
+  string type = 3;
+  string launch_date = 4;
+  string platform = 5;
+  string publisher = 6;
+  int32 available_units = 7;
+  string image = 8;
+}
+
+message DeleteGameRequest {
+  string title = 1;
+}
+
+message GameRequest {
+  string title = 1;
+}
+
+message GameResponse {
+  string message = 1;
+}
+
+message GameListResponse {
+  repeated GameResponse games = 1;
+}
+
+// Empty messages
+message Empty {}
